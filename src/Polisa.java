@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Polisa {
     private String numerPolisy;
     private String klient;
@@ -52,6 +54,7 @@ public class Polisa {
     public static int getLiczbaUtworzonychPolis() {
         return liczbaUtworzonychPolis;
     }
+
     public double obliczSkladkeKoncowa() {
         double skladka = this.skladkaBazowa;
         double mnoznikRyzyka = 1.2 + (this.poziomRyzyka * 0.5);
@@ -63,16 +66,17 @@ public class Polisa {
         if (this.czyBezszkodowyKlient) {
             skladka *= 0.85;
         }
-        if ( maskymalanawartosc< this.wartoscPojazdu ) {
+        if (maskymalanawartosc < this.wartoscPojazdu) {
             skladka += (this.wartoscPojazdu * 0.01);
         }
         skladka += OPLATA_ADMINISTRACYJNA;
 
-        if ( skladka < this.skladkaBazowa ) {
-            System.out.println (" koncowa skladka jest niepoprawna");
+        if (skladka < this.skladkaBazowa) {
+            System.out.println(" koncowa skladka jest niepoprawna");
         }
         return skladka;
     }
+
     public double ObliczSkladkeOdnowieniowa() {
         double skladkaodnowieniowa = this.obliczSkladkeKoncowa();
         double nowaskladka = skladkaodnowieniowa;
@@ -99,4 +103,29 @@ public class Polisa {
         return nowaskladka;
 
     }
+
+        public String pobierzPodsumowanieRyzyka() {
+            if (poziomRyzyka <= 2) return "Niskie";
+            if (poziomRyzyka <= 4) return "Średnie";
+            return "Wysokie";
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Polisa polisa = (Polisa) o;
+        return Objects.equals(numerPolisy, polisa.numerPolisy);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(numerPolisy);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Polisa [%s] | Klient: %s | Składka: %.2f zł",
+                numerPolisy, klient, obliczSkladkeKoncowa());
+    }
 }
+
